@@ -583,8 +583,8 @@ git:
     repositories:
       - repository: https://github.com/afonsir/cyrela-etl.git
         branch: main
-        name: github
-        path:
+        name: github-dags
+        path: ./
   plugins:
     ## Enable in order to download Plugins files from git repositories.
     ##
@@ -874,7 +874,7 @@ nodeSelector: {}
 postgresql:
   enabled: true
   postgresqlUsername: bn_airflow
-  # postgresqlPassword:
+  postgresqlPassword: bn_airflow_123
   postgresqlDatabase: bitnami_airflow
   ## In case of postgresql.enabled = true, allow the usage of existing secrets for postgresql
   ##
@@ -890,7 +890,7 @@ externalDatabase:
   user: bn_airflow
   ## Database password
   ##
-  password:
+  password: bn_airflow_123
   ## Name of an existing secret resource containing the DB password
   ##
   existingSecret:
@@ -920,7 +920,7 @@ redis:
     ## It should always be set using the password value or in the existingSecret to avoid issues
     ## with Airflow.
     ## The password value is ignored if existingSecret is set
-    # password:
+    password: redis123
     ##
     ## Name of existing secret object containing the password
     ##
@@ -941,7 +941,7 @@ externalRedis:
   port: 6379
   ## Redis(TM) password
   ##
-  password:
+  password: redis123
   ## Name of an existing secret resource containing the Redis(TM) password in a 'redis-password' key
   ##
   existingSecret:
