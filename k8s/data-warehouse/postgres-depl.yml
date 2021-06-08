@@ -1,0 +1,43 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: postgres-depl
+  namespace: data-warehouse
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: postgres
+  template:
+    metadata:
+      labels:
+        app: postgres
+    spec:
+      containers:
+        - name: postgres
+          image: postgres:13.3-alpine
+          env:
+            - name: POSTGRES_DB
+              value: "data_warehouse"
+            - name: POSTGRES_USER
+              value: "postgres_user"
+            - name: POSTGRES_PASSWORD
+              value: "postgres_pwd"
+          ports:
+            - containerPort: 5432
+              hostPort: 5432
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: postgres-cip-srv
+  namespace: data-warehouse
+spec:
+  type: ClusterIP
+  selector:
+    app: postgres
+  ports:
+    - name: postgres
+      protocol: TCP
+      port: 5432
+      targetPort: 5432
