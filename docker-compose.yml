@@ -148,6 +148,23 @@ services:
       retries: 5
     restart: always
 
+  postgres-dw:
+    image: postgres:13
+    environment:
+      POSTGRES_USER: datawarehouse
+      POSTGRES_PASSWORD: datawarehouse
+      POSTGRES_DB: datawarehouse
+    ports:
+      - 5432:5432
+    volumes:
+      - postgres-dw-volume:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD", "pg_isready", "-U", "airflow"]
+      interval: 5s
+      retries: 5
+    restart: always
+
 volumes:
   postgres-db-volume:
+  postgres-dw-volume:
   minio-data:
