@@ -101,6 +101,7 @@ services:
 
   airflow-scheduler:
     <<: *airflow-common
+    image: afonsir/apache-airflow-custom:2.1.0-python3.7
     command: scheduler
     healthcheck:
       test: ["CMD-SHELL", 'airflow jobs check --job-type SchedulerJob --hostname "$${HOSTNAME}"']
@@ -111,6 +112,7 @@ services:
 
   airflow-worker:
     <<: *airflow-common
+    image: afonsir/apache-airflow-custom:2.1.0-python3.7
     command: celery worker
     healthcheck:
       test:
