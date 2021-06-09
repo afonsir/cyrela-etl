@@ -1,0 +1,4 @@
+logs/*
+!logs/.keep
+
+__pycache__
