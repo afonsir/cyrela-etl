@@ -4,4 +4,4 @@ WORKDIR /opt
 
 COPY ./requirements.txt ./
 
-RUN pip install --requirement requirements.txt
+RUN pip3 install --quiet --requirement requirements.txt
