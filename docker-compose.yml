@@ -164,6 +164,28 @@ services:
       retries: 5
     restart: always
 
+  spark-main:
+    image: afonsir/apache-spark-custom:3.0.2-hadoop2.7
+    hostname: spark-main
+    ports:
+      - 8081:8080
+      - 7077:7077
+    environment:
+      SPARK_LOCAL_IP: spark-main
+      SPARK_MASTER_PORT: 7077
+      SPARK_MASTER_WEBUI_PORT: 8080
+    command: "/start-main.sh"
+
+  spark-worker:
+    image: afonsir/apache-spark-custom:3.0.2-hadoop2.7
+    depends_on:
+      - spark-main
+    environment:
+      SPARK_MASTER: spark://spark-main:7077
+      SPARK_WORKER_WEBUI_PORT: 8080
+      PYTHONIOENCODING: utf8
+    command: "/start-worker.sh"
+
 volumes:
   postgres-db-volume:
   postgres-dw-volume:
