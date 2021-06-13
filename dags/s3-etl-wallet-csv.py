@@ -12,6 +12,7 @@ from airflow.providers.amazon.aws.sensors.s3_key import S3KeySensor
 from airflow.providers.amazon.aws.operators.s3_list import S3ListOperator
 from airflow.providers.amazon.aws.operators.s3_copy_object import S3CopyObjectOperator
 from airflow.providers.amazon.aws.operators.s3_delete_objects import S3DeleteObjectsOperator
+from airflow.contrib.operators.spark_submit_operator import SparkSubmitOperator
 # [END import_module]
 
 # [START env_variables]
@@ -43,7 +44,7 @@ dag = DAG(
     's3-etl-wallet-csv',
     default_args=default_args,
     schedule_interval='@daily',
-    tags=['development', 's3', 'sensor', 'minio', 'python', 'postgresdb'])
+    tags=['development', 's3', 'sensor', 'minio', 'python', 'postgresdb', 'spark', 'tensorflow'])
 # [END instantiate_dag]
 
 
@@ -179,6 +180,17 @@ process_wallet_data = PythonOperator(
     python_callable=parse_wallet_data,
     dag=dag)
 
+tf_pre_processing_wallet_data = SparkSubmitOperator(
+    task_id='tf_pre_processing_wallet_data',
+    conn_id='spark_local',
+    application='/spark-jobs/pr-wallet-data-tf.py',
+    jars='/opt/spark/jars/aws-java-sdk-1.7.4.jar,/opt/spark/jars/hadoop-aws-2.7.3.jar',
+    total_executor_cores=1,
+    executor_cores=1,
+    executor_memory='1g',
+    driver_memory='1g',
+    dag=dag)
+
 # delete file from processed zone
 delete_s3_file_processed_zone = S3DeleteObjectsOperator(
     task_id='delete_s3_file_processed_zone',
@@ -231,5 +243,6 @@ write_wallet_dt_postgresdb = PythonOperator(
 # [END set_tasks]
 
 # [START task_sequence]
+verify_file_existence_landing >> list_file_s3 >> copy_s3_file_processed_zone >> delete_s3_file_landing_zone >> process_wallet_data >> tf_pre_processing_wallet_data
 verify_file_existence_landing >> list_file_s3 >> copy_s3_file_processed_zone >> delete_s3_file_landing_zone >> process_wallet_data >> delete_s3_file_processed_zone >> create_postgres_tb >> write_wallet_dt_postgresdb
 # [END task_sequence]
