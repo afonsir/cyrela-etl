@@ -50,10 +50,12 @@ x-airflow-common:
     AIRFLOW__CORE__DAGS_ARE_PAUSED_AT_CREATION: 'true'
     AIRFLOW__CORE__LOAD_EXAMPLES: 'false'
     AIRFLOW__API__AUTH_BACKEND: 'airflow.api.auth.backend.basic_auth'
+    JAVA_HOME: /usr/lib/jvm/java-1.11.0-openjdk-amd64
   volumes:
     - ./dags:/opt/airflow/dags
     - ./logs:/opt/airflow/logs
     - ./plugins:/opt/airflow/plugins
+    - ./spark/jobs:/spark-jobs
   user: "${AIRFLOW_UID:-50000}:${AIRFLOW_GID:-50000}"
   depends_on:
     redis:
@@ -172,10 +174,12 @@ services:
       SPARK_LOCAL_IP: spark-main
       SPARK_MASTER_PORT: 7077
       SPARK_MASTER_WEBUI_PORT: 8080
+      PYTHONIOENCODING: utf8
     command: "/start-main.sh"
 
   spark-worker:
     image: afonsir/apache-spark-custom:3.0.2-hadoop2.7
+    hostname: spark-worker
     depends_on:
       - spark-main
     environment:
