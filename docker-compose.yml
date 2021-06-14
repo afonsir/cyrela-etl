@@ -76,7 +76,6 @@ services:
       test: ["CMD", "pg_isready", "-U", "airflow"]
       interval: 5s
       retries: 5
-    restart: always
 
   redis:
     image: redis:latest
@@ -85,7 +84,6 @@ services:
       interval: 5s
       timeout: 30s
       retries: 50
-    restart: always
 
   airflow-webserver:
     <<: *airflow-common
@@ -97,7 +95,6 @@ services:
       interval: 10s
       timeout: 10s
       retries: 5
-    restart: always
 
   airflow-scheduler:
     <<: *airflow-common
@@ -107,7 +104,6 @@ services:
       interval: 10s
       timeout: 10s
       retries: 5
-    restart: always
 
   airflow-worker:
     <<: *airflow-common
@@ -119,7 +115,6 @@ services:
       interval: 10s
       timeout: 10s
       retries: 5
-    restart: always
 
   airflow-init:
     <<: *airflow-common
@@ -146,7 +141,6 @@ services:
       interval: 10s
       timeout: 10s
       retries: 5
-    restart: always
 
   postgres-dw:
     image: postgres:13
@@ -162,7 +156,6 @@ services:
       test: ["CMD", "pg_isready", "-U", "airflow"]
       interval: 5s
       retries: 5
-    restart: always
 
   spark-main:
     image: afonsir/apache-spark-custom:3.0.2-hadoop2.7
