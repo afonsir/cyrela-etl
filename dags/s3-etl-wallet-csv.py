@@ -44,6 +44,7 @@ dag = DAG(
     's3-etl-wallet-csv',
     default_args=default_args,
     schedule_interval='@daily',
+    catchup=False,
     tags=['development', 's3', 'sensor', 'minio', 'python', 'postgresdb', 'spark', 'tensorflow'])
 # [END instantiate_dag]
 
