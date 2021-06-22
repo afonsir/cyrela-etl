@@ -6,7 +6,7 @@ from pyspark import SparkContext, SparkConf
 # set config
 conf = (
 SparkConf()
-    .set("spark.hadoop.fs.s3a.endpoint", "http://172.24.0.5:9000")
+    .set("spark.hadoop.fs.s3a.endpoint", "http://172.24.0.3:9000")
     .set("spark.hadoop.fs.s3a.access.key", "airflow_access_key")
     .set("spark.hadoop.fs.s3a.secret.key", "airflow_secret_key")
     .set("spark.hadoop.fs.s3a.path.style.access", True)
