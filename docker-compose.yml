@@ -128,12 +128,12 @@ services:
 
   minio:
     image: minio/minio:latest
-    command: server /data
+    command: server /data --console-address ':9001'
     environment:
-      MINIO_ACCESS_KEY: airflow_access_key
-      MINIO_SECRET_KEY: airflow_secret_key
+      MINIO_ROOT_USER: airflow_access_key
+      MINIO_ROOT_PASSWORD: airflow_secret_key
     ports:
-      - 9000:9000
+      - 9001:9001
     volumes:
       - minio-data:/data
     healthcheck:
